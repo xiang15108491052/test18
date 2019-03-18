@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 引入properties配置文件 -->
+	<properties resource="datasource.properties"/>
+	
+	<settings>
+		<setting name="cacheEnabled" value="true"/>
+		<!-- 打印日志在控制台 -->
+		<setting name="logImpl" value="STDOUT_LOGGING"/>
+	</settings>
+	
+	<!-- 为Java对象取别名 -->
+	<typeAliases>
+		<package name="com.lovo.test18.bean"/>
+	</typeAliases>
+	
+	<environments default="development">
+	    <environment id="development"><!-- environment可以配置多个开发环境 -->
+	      <transactionManager type="JDBC"/><!-- transactionManager事务管理器 JDBC自己管理 MANAGED被管理-->
+	      <dataSource type="POOLED"><!-- dataSource数据源 POOLED连接池 UNPOOLED传统连接 JNDI远程连接-->
+	        <property name="driver" value="${driver}"/>
+	        <property name="url" value="${url}"/>
+	        <property name="username" value="${username}"/>
+	        <property name="password" value="${password}"/>
+	      </dataSource>
+	    </environment>
+  	</environments>
+  	
+  	<!-- 注册单独的映射文件 -->
+  	<mappers>
+		<mapper resource="com/lovo/test18/bean/StudentMapper.xml"/>
+		<mapper resource="com/lovo/test18/bean/ClassMapper.xml"/>
+  	</mappers>
+
+</configuration>  
+  

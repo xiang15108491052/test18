@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lovo.test18.mapper.ClassMapper">
+
+    <resultMap id="studentRM" type="studentBean">
+        <id property="id" column="pk_id"/>
+        <result property="name" column="f_stu_name"/>
+        <result property="birthday" column="f_birthday"/>
+        <result property="sex" column="f_sex"/>
+    </resultMap>
+
+    <resultMap id="classRM" type="classBean">
+        <id property="id" column="pk_id"/>
+        <result property="name" column="f_className"/>
+        <result property="creatTime" column="f_creatTime"/>
+        <collection property="studentBeanList" select="getStudent" column="pk_id"/>
+    </resultMap>
+
+    <select id="getStudent" resultMap="studentRM">
+        select * from t_student where fk_class_id = #{id}
+    </select>
+
+
+
+</mapper>

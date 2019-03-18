@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lovo.test18.mapper.StudentMapper">
+
+    <resultMap id="studentRM" type="studentBean">
+        <id property="id" column="pk_id"/>
+        <result property="name" column="f_stu_name"/>
+        <result property="birthday" column="f_birthday"/>
+        <result property="sex" column="f_sex"/>
+        <association property="classBean" select="getClassBean" column="fk_class_id"/>
+    </resultMap>
+
+    <resultMap id="classRM" type="classBean">
+        <id property="id" column="pk_id"/>
+        <result property="name" column="f_className"/>
+        <result property="creatTime" column="f_creatTime"/>
+    </resultMap>
+
+    <select id="getAllStudentCount" parameterType="map" resultType="int">
+        select count(*)
+        from t_student s
+        inner join t_class c on c.pk_id = s.fk_class_id
+        <where>
+            <if test="className != null ">
+                or c.f_className = #{className}
+            </if>
+            <if test="studentName != null ">
+                or s.f_stu_name like "%"#{studentName}"%"
+            </if>
+            <if test="startTime != null or endTime != null ">
+                or s.f_birthday between #{startTime} and #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="getStudentList" parameterType="map" resultMap="studentRM">
+        select s.f_stu_name,s.f_sex,s.f_birthday,c.f_className,s.fk_class_id
+        from t_student s
+        inner join t_class c on c.pk_id = s.fk_class_id
+        <where>
+            <if test="className != null and className != '' ">
+                or c.f_className = #{className}
+            </if>
+            <if test="studentName != null and studentName != '' ">
+                or s.f_stu_name like "%"#{studentName}"%"
+            </if>
+            <if test="startTime != null or endTime != null ">
+                or s.f_birthday between #{startTime} and #{endTime}
+            </if>
+        </where>
+        <if test="pageSize != 0">
+            limit #{index},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getClassBean" resultMap="classRM">
+        select * from t_class where pk_id = #{param1}
+    </select>
+
+</mapper>
